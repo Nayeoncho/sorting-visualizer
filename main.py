@@ -83,6 +83,7 @@ while running:
 
     # Update the display (swap buffers)
     pygame.display.flip()
+    pygame.time.delay(100)
 
 # Quit pygame and clean up
 pygame.quit()
