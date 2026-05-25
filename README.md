@@ -2,9 +2,6 @@
 
 Real-time sorting algorithm visualization built with Python and Pygame.
 
-## Demo
-> GIF 녹화 후 여기에 삽입
-
 ## Features
 - 5 Algorithms: Bubble, Selection, Insertion, Merge, Quick Sort
 - Real-time comparison & swap counters
