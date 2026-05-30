@@ -5,9 +5,9 @@ def generate_array(size):
     # Generate a list of random integers
     return [random.randint(10, 400) for _ in range(size)]
 
-def draw_array(screen, array, highlight):
+def draw_array(screen, array, highlight=[], stats={}, font=None):
     # Calculate bar width based on screen width and array size
-    bar_width = WIDTH / len(array)
+    bar_width = WIDTH // len(array)
 
     for i, value in enumerate(array):
         # Calculate x position and bar height
@@ -24,19 +24,31 @@ def draw_array(screen, array, highlight):
         # Draw each bar as a rectangle
         pygame.draw.rect(screen, color, (x, y, bar_width-2, bar_height))
 
-def bubble_sort(array):
+        # Display stats on screen
+        if font:
+            text = f"Comparisons: {stats.get('comparisons', 0)}   Swaps: {stats.get('swaps', 0)}"
+            surface = font.render(text, True, (255, 255, 255))
+            screen.blit(surface, (10, 10))
+
+
+def bubble_sort(array, stats):
     n = len(array)
     for i in range(n):
         for j in range(n - i - 1):
+            # Count each comparison
+            stats["comparisons"] += 1
             if array[j] > array[j + 1]:
                 # Swap adjacent element
                 array[j], array[j + 1] = array[j + 1], array[j]
+                # Count each swap
+                stats["swaps"] += 1
                 yield j, j+1
 
 
 
 # Initialize all pygame modules
 pygame.init()
+font = pygame.font.SysFont("consolas", 16)
 
 # Windows dimensions
 WIDTH, HEIGHT = 800, 600
@@ -48,8 +60,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Sorting Visualizer")
 
 # Generate initial array (add this before the while loop)
-array = generate_array(50)
-generator = bubble_sort(array)
+array = generate_array(20)
+stats = {"swaps": 0, "comparisons": 0}
+generator = bubble_sort(array, stats)
 highlight = []
 
 # Main loop flag
@@ -79,10 +92,11 @@ while running:
     screen.fill((18, 18, 24))
 
     # Inside the while loop, after screen.fill()
-    draw_array(screen, array, highlight)
+    draw_array(screen, array, highlight, stats, font)
 
     # Update the display (swap buffers)
     pygame.display.flip()
+    # Wait 100 milliseconds between each step
     pygame.time.delay(100)
 
 # Quit pygame and clean up
