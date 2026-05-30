@@ -24,10 +24,13 @@ def draw_array(screen, array, highlight=[], stats={}, font=None):
         # Draw each bar as a rectangle
         pygame.draw.rect(screen, color, (x, y, bar_width-2, bar_height))
 
-        # Display stats on screen
+        # Display stats on screen (only if font is not None)
         if font:
+            # stats.get: get data from the dictionary
             text = f"Comparisons: {stats.get('comparisons', 0)}   Swaps: {stats.get('swaps', 0)}"
+            # Convert data from text to image(surface)
             surface = font.render(text, True, (255, 255, 255))
+            # Attach image on the screen / (10, 10) -> x, y coordinate
             screen.blit(surface, (10, 10))
 
 
@@ -61,17 +64,14 @@ pygame.display.set_caption("Sorting Visualizer")
 
 # Generate initial array (add this before the while loop)
 array = generate_array(20)
+
+# stats: dictionary
 stats = {"swaps": 0, "comparisons": 0}
 generator = bubble_sort(array, stats)
 highlight = []
 
 # Main loop flag
 running = True
-
-# test = [5,3,8,1,9,2]
-# print("Before:", test)
-# bubble_sort(test)
-# print("After:", test)
 
 # Keep running til the user closes the window
 while running:
@@ -80,6 +80,17 @@ while running:
         # X button clicked
         if event.type == pygame.QUIT:
             running = False
+
+        # Reset events
+        # Detect key press
+        if event.type == pygame.KEYDOWN:
+            # R key -> reset
+            if event.key == pygame.K_r:
+                array = generate_array(20)
+                # Reset counter, generator, and clear highlights
+                stats = {"comparisons": 0, "swaps": 0}
+                generator = bubble_sort(array, stats)
+                highlight = []
 
     # Advance one step of the sort
     try:
