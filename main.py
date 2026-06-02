@@ -1,5 +1,8 @@
 import pygame
 import random
+from bubble_sort import bubble_sort
+from merge_sort import merge_sort
+# from quick_sort import quick_sort
 
 def generate_array(size):
     # Generate a list of random integers
@@ -34,21 +37,6 @@ def draw_array(screen, array, highlight=[], stats={}, font=None, speed=0):
             screen.blit(surface, (10, 10))
 
 
-def bubble_sort(array, stats):
-    n = len(array)
-    for i in range(n):
-        for j in range(n - i - 1):
-            # Count each comparison
-            stats["comparisons"] += 1
-            if array[j] > array[j + 1]:
-                # Swap adjacent element
-                array[j], array[j + 1] = array[j + 1], array[j]
-                # Count each swap
-                stats["swaps"] += 1
-            yield j, j+1
-
-
-
 # Initialize all pygame modules
 pygame.init()
 font = pygame.font.SysFont("consolas", 16)
@@ -67,7 +55,14 @@ array = generate_array(20)
 
 # stats: dictionary
 stats = {"swaps": 0, "comparisons": 0}
+
+# Bubble sort
 generator = bubble_sort(array, stats)
+
+# Merge sort
+generator = merge_sort(array, stats, 0, len(array))
+
+# Set default values
 highlight = []
 speed = 100
 
@@ -84,6 +79,11 @@ while running:
 
         # Detect key press
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                generator = bubble_sort(array, stats)
+            elif event.key == pygame.K_2:
+                generator = merge_sort(array, stats, highlight)
+
             # Reset events
             # R key -> reset
             if event.key == pygame.K_r:
