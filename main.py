@@ -8,7 +8,7 @@ def generate_array(size):
     # Generate a list of random integers
     return [random.randint(10, 400) for _ in range(size)]
 
-def draw_array(screen, array, highlight=[], stats={}, font=None, speed=0):
+def draw_array(screen, array, highlight=[], stats={}, font=None, speed=0, current_algo=""):
     # Calculate bar width based on screen width and array size
     bar_width = WIDTH // len(array)
 
@@ -30,7 +30,7 @@ def draw_array(screen, array, highlight=[], stats={}, font=None, speed=0):
         # Display stats and speed on screen (only if font is not None)
         if font:
             # stats.get: get data from the dictionary
-            text = f"Comparisons: {stats.get('comparisons', 0)}   Swaps: {stats.get('swaps', 0)}   Speed: {speed}ms"
+            text = f"Sorting method: {current_algo}   Comparisons: {stats.get('comparisons', 0)}   Swaps: {stats.get('swaps', 0)}   Speed: {speed}ms"
             # Convert data from text to image(surface)
             surface = font.render(text, True, (255, 255, 255))
             # Attach image on the screen / (10, 10) -> x, y coordinate
@@ -56,15 +56,11 @@ array = generate_array(20)
 # stats: dictionary
 stats = {"swaps": 0, "comparisons": 0}
 
-# Bubble sort
-generator = bubble_sort(array, stats)
-
-# Merge sort
-generator = merge_sort(array, stats, 0, len(array))
-
 # Set default values
 highlight = []
 speed = 100
+generator = bubble_sort(array, stats)
+current_algo = "bubble"
 
 # Main loop flag
 running = True
@@ -79,10 +75,29 @@ while running:
 
         # Detect key press
         if event.type == pygame.KEYDOWN:
+            # Press key 1, switch to bubble sort
             if event.key == pygame.K_1:
+                current_algo = "bubble"
                 generator = bubble_sort(array, stats)
+                array = generate_array(20)
+                stats = {"comparisons": 0, "swaps": 0}
+                highlight = []
+
+            # Press key 2, switch to merge sort
             elif event.key == pygame.K_2:
-                generator = merge_sort(array, stats, highlight)
+                current_algo = "merge"
+                generator = merge_sort(array, stats, 0, len(array))
+                array = generate_array(20)
+                stats = {"swaps": 0, "comparisons": 0}
+                highlight = []
+
+            # Press key 3, switch to quick sort
+            # elif event.key == pygame.K_3:
+            #     current_algo = "quick"
+            #     generator = quick_sort(array, stats, 0, len(array))
+            #     array = generate_array(20)
+            #     stats = {"swaps": 0, "comparisons": 0}
+            #     highlight = []
 
             # Reset events
             # R key -> reset
@@ -90,8 +105,11 @@ while running:
                 array = generate_array(20)
                 # Reset counter, generator, and clear highlights
                 stats = {"comparisons": 0, "swaps": 0}
-                generator = bubble_sort(array, stats)
                 highlight = []
+                if current_algo == "bubble":
+                    generator = bubble_sort(array, stats)
+                elif current_algo == "merge":
+                    generator = merge_sort(array, stats, 0, len(array))
 
             # Speed control events
             if event.key == pygame.K_UP:
@@ -110,7 +128,7 @@ while running:
     screen.fill((18, 18, 24))
 
     # Inside the while loop, after screen.fill()
-    draw_array(screen, array, highlight, stats, font, speed)
+    draw_array(screen, array, highlight, stats, font, speed, current_algo)
 
     # Update the display (swap buffers)
     pygame.display.flip()
