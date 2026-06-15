@@ -2,7 +2,7 @@ import pygame
 import random
 from bubble_sort import bubble_sort
 from merge_sort import merge_sort
-# from quick_sort import quick_sort
+from quick_sort import quick_sort
 
 def generate_array(size):
     # Generate a list of random integers
@@ -92,12 +92,12 @@ while running:
                 highlight = []
 
             # Press key 3, switch to quick sort
-            # elif event.key == pygame.K_3:
-            #     current_algo = "quick"
-            #     generator = quick_sort(array, stats, 0, len(array))
-            #     array = generate_array(20)
-            #     stats = {"swaps": 0, "comparisons": 0}
-            #     highlight = []
+            elif event.key == pygame.K_3:
+                current_algo = "quick"
+                generator = quick_sort(array, stats, 0, len(array)-1)
+                array = generate_array(20)
+                stats = {"swaps": 0, "comparisons": 0}
+                highlight = []
 
             # Reset events
             # R key -> reset
@@ -110,6 +110,8 @@ while running:
                     generator = bubble_sort(array, stats)
                 elif current_algo == "merge":
                     generator = merge_sort(array, stats, 0, len(array))
+                elif current_algo == "quick":
+                    generator = quick_sort(array, stats, 0, len(array)-1)
 
             # Speed control events
             if event.key == pygame.K_UP:
