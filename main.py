@@ -78,24 +78,24 @@ while running:
             # Press key 1, switch to bubble sort
             if event.key == pygame.K_1:
                 current_algo = "bubble"
-                generator = bubble_sort(array, stats)
                 array = generate_array(20)
+                generator = bubble_sort(array, stats)
                 stats = {"comparisons": 0, "swaps": 0}
                 highlight = []
 
             # Press key 2, switch to merge sort
             elif event.key == pygame.K_2:
                 current_algo = "merge"
-                generator = merge_sort(array, stats, 0, len(array))
                 array = generate_array(20)
+                generator = merge_sort(array, stats, 0, len(array))
                 stats = {"swaps": 0, "comparisons": 0}
                 highlight = []
 
             # Press key 3, switch to quick sort
             elif event.key == pygame.K_3:
                 current_algo = "quick"
-                generator = quick_sort(array, stats, 0, len(array)-1)
                 array = generate_array(20)
+                generator = quick_sort(array, stats, 0, len(array)-1)
                 stats = {"swaps": 0, "comparisons": 0}
                 highlight = []
 
